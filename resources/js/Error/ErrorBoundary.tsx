@@ -1,0 +1,41 @@
+import React, { Component, ErrorInfo, ReactNode } from "react";
+
+interface Props {
+    children?: ReactNode;
+}
+
+interface State {
+    hasError: boolean;
+}
+
+class ErrorBoundary extends Component<Props, State> {
+    public state: State = {
+        hasError: false,
+    };
+
+    public static getDerivedStateFromError(_: Error): State {
+        // Update state so the next render will show the fallback UI.
+        return { hasError: true };
+    }
+
+    public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+        console.error("Uncaught error:", error, errorInfo);
+    }
+
+    public render() {
+        if (this.state.hasError) {
+            return (
+                <div className="w-full h-screen p-6 flex justify-center items-center">
+                    <h1>
+                        this is <b>React Error Boundary</b>. If youre seeing
+                        this. there was an error occured..
+                    </h1>
+                </div>
+            );
+        }
+
+        return this.props.children;
+    }
+}
+
+export default ErrorBoundary;
